@@ -9,7 +9,10 @@ fn print_tree(path: &Path, prefix: &str) {
         for (i, entry) in entries.iter().enumerate() {
             let is_last = i == entries.len() - 1;
             let entry_path = entry.path();
-            let entry_name = entry_path.file_name().unwrap().to_string_lossy();
+            let entry_name = entry_path
+                .file_name()
+                .map(|s| s.to_string_lossy().into_owned())
+                .unwrap_or_else(|| entry_path.display().to_string());
 
             println!("{}{} {}", prefix, if is_last { "└──" } else { "├──" }, entry_name);
 
